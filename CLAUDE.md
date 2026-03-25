@@ -40,6 +40,8 @@ Claude Code passes a JSON object via stdin containing:
 - `model.display_name` / `model.id` - Current model info
 - `cwd` / `workspace.project_dir` - Project directory
 - `context_window.used_percentage` - Context usage
+- `context_window.context_window_size` - Max context window tokens
+- `context_window.remaining_percentage` - Context remaining (alternative to used_percentage)
 - `rate_limits.five_hour/seven_day.used_percentage` - Rate limits (Anthropic API only)
 - `context_window.total_input_tokens/total_output_tokens` - Token counts (third-party APIs)
 - `cost.total_cost_usd` - Cumulative cost
@@ -59,7 +61,7 @@ Claude Code passes a JSON object via stdin containing:
 ### Provider Detection Logic
 
 The script detects providers by pattern matching against `ANTHROPIC_BASE_URL`:
-- Reads `~/.claude/settings.json` → `.env.ANTHROPIC_BASE_URL`
+- Priority: `$project/.claude/settings.local.json` → `~/.claude/settings.json`
 - Matches URL patterns to identify providers (GLM, DeepSeek, OpenAI, etc.)
 - Falls back to extracting domain name for unknown providers
 
@@ -85,6 +87,7 @@ Uses `tput` for terminal color compatibility with fallback to raw ANSI sequences
 ├── .claudeignore              # Claude Code ignore rules
 └── .claude/
     ├── settings.json          # Project Claude Code config (hooks, permissions)
+    ├── settings.local.json    # Local project config (gitignored, e.g., API provider)
     └── agents/
         └── shell-linter.md    # Shell script review subagent
 ```
