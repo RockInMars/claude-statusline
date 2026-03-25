@@ -16,6 +16,10 @@ echo '{"model":{"display_name":"claude-sonnet-4-0","id":"claude-sonnet-4-0"},"cw
 
 # Test with empty input (initialization state)
 echo '' | bash statusline.sh
+
+# Debug mode: inspect actual JSON input from Claude Code
+# Run: STATUSLINE_DEBUG=1 claude
+# Then: cat /tmp/statusline_debug.json | jq '.'
 ```
 
 ### Installation/Uninstallation
