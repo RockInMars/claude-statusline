@@ -149,8 +149,15 @@ Ctx: 44% │ 446Kin/35Kout │ $6.12 │ Provider: 智谱 GLM
 ## 文件结构
 
 ```
-statusline/
-├── statusline.sh    # 主脚本
-├── install.sh       # 安装/卸载脚本
-└── README.md        # 文档
+claude-statusline/
+├── statusline.sh              # 主脚本
+├── install.sh                 # 安装/卸载脚本
+├── README.md                  # 文档
+├── CLAUDE.md                  # Claude Code 指南
+├── .gitignore                 # Git 忽略规则
+├── .claudeignore              # Claude Code 忽略规则
+└── .claude/
+    ├── settings.json          # Claude Code 项目配置
+    └── agents/
+        └── shell-linter.md    # Shell 脚本审查 agent
 ```

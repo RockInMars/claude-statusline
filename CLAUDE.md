@@ -72,3 +72,19 @@ Uses `tput` for terminal color compatibility with fallback to raw ANSI sequences
 - `jq` - JSON processing (required)
 - `git` - Version control info (required)
 - `tput` - Terminal colors (optional, has fallback)
+
+## Project Structure
+
+```
+.
+├── statusline.sh              # Main statusline script
+├── install.sh                 # Installation/uninstallation
+├── CLAUDE.md                  # This file
+├── README.md                  # User documentation
+├── .gitignore                 # Git ignore rules
+├── .claudeignore              # Claude Code ignore rules
+└── .claude/
+    ├── settings.json          # Project Claude Code config (hooks, permissions)
+    └── agents/
+        └── shell-linter.md    # Shell script review subagent
+```
