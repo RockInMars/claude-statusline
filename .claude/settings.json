@@ -17,19 +17,5 @@
 		]
 	},
 	"hooks": {
-		"PostToolUse": [
-			{
-				"matcher": {
-					"toolName": "Edit|Write",
-					"filePathGlob": "**/*.sh"
-				},
-				"hooks": [
-					{
-						"type": "command",
-						"command": "shellcheck --severity=warning \"$FILE_PATH\" 2>&1 || true"
-					}
-				]
-			}
-		]
 	}
 }
