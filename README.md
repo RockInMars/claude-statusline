@@ -119,7 +119,32 @@ Ctx: 44% │ 446Kin/35Kout │ $6.12 │ Provider: 智谱 GLM
 
 ## 配置供应商
 
-在 `~/.claude/settings.json` 中设置 `ANTHROPIC_BASE_URL`：
+### 配置优先级
+
+供应商检测按以下优先级读取配置：
+
+1. **项目本地配置**：`$项目目录/.claude/settings.local.json`
+2. **用户全局配置**：`~/.claude/settings.json`
+
+这意味着你可以为不同项目配置不同的 API 供应商，项目配置会覆盖全局配置。
+
+### 项目级配置
+
+在项目目录下创建 `.claude/settings.local.json`：
+
+```json
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://api.deepseek.com"
+  }
+}
+```
+
+> **注意**：`settings.local.json` 已添加到 `.gitignore`，不会提交到代码库。
+
+### 用户级配置
+
+在 `~/.claude/settings.json` 中设置：
 
 ```json
 {
