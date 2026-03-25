@@ -1,0 +1,35 @@
+{
+	"enabledPlugins": {
+		"github@claude-plugins-official": true,
+		"superpowers@superpowers-marketplace": true
+	},
+	"permissions": {
+		"allow": [
+			"Read",
+			"Edit",
+			"Write",
+			"Bash(bash *)",
+			"Bash(git *)",
+			"Bash(jq *)",
+			"Bash(shellcheck *)",
+			"Bash(mkdir *)",
+			"Bash(rm *)"
+		]
+	},
+	"hooks": {
+		"PostToolUse": [
+			{
+				"matcher": {
+					"toolName": "Edit|Write",
+					"filePathGlob": "**/*.sh"
+				},
+				"hooks": [
+					{
+						"type": "command",
+						"command": "shellcheck --severity=warning \"$FILE_PATH\" 2>&1 || true"
+					}
+				]
+			}
+		]
+	}
+}
