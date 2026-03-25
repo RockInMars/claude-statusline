@@ -1,4 +1,6 @@
 {
+	"env":{
+	},
 	"enabledPlugins": {
 		"github@claude-plugins-official": true,
 		"superpowers@superpowers-marketplace": true
