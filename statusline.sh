@@ -353,13 +353,13 @@ fi
 # Line 2: Context & Usage
 line2_parts=()
 
-# Context usage
-if [[ -n "$context_used_pct" ]]; then
-    line2_parts+=("Ctx: $(format_pct "$context_used_pct")")
-elif [[ -n "$context_remaining_pct" ]]; then
-    # Calculate used from remaining
-    used=$((100 - context_remaining_pct))
-    line2_parts+=("Ctx: $(format_pct "$used")")
+# Context remaining
+if [[ -n "$context_remaining_pct" ]]; then
+    line2_parts+=("Ctx: $(format_pct "$context_remaining_pct")")
+elif [[ -n "$context_used_pct" ]]; then
+    # Calculate remaining from used
+    remaining=$((100 - context_used_pct))
+    line2_parts+=("Ctx: $(format_pct "$remaining")")
 fi
 
 # Rate limits (only available for Anthropic API)
