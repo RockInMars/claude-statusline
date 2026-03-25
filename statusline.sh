@@ -122,11 +122,10 @@ get_provider_info() {
     local base_url=""
 
     # Priority: project local config > user global config
+    # Only use user config if project config file doesn't exist
     if [[ -f "$project_settings" ]]; then
         base_url=$(jq -r '.env.ANTHROPIC_BASE_URL // empty' "$project_settings" 2>/dev/null)
-    fi
-
-    if [[ -z "$base_url" && -f "$user_settings" ]]; then
+    elif [[ -f "$user_settings" ]]; then
         base_url=$(jq -r '.env.ANTHROPIC_BASE_URL // empty' "$user_settings" 2>/dev/null)
     fi
 
