@@ -77,7 +77,14 @@ workspace_dir=$(jq_get '.workspace.project_dir' "$project_dir")
 # Context window info
 context_used_pct=$(jq_get_num '.context_window.used_percentage')
 context_remaining_pct=$(jq_get_num '.context_window.remaining_percentage')
+# Try multiple possible field names for max tokens
 context_max_tokens=$(jq_get_num '.context_window.max_tokens')
+if [[ -z "$context_max_tokens" || "$context_max_tokens" == "0" ]]; then
+    context_max_tokens=$(jq_get_num '.context_window.context_window_size')
+fi
+if [[ -z "$context_max_tokens" || "$context_max_tokens" == "0" ]]; then
+    context_max_tokens=$(jq_get_num '.context_window.total_tokens')
+fi
 
 # Rate limits (only available for Anthropic API)
 five_hour_pct=$(jq_get_num '.rate_limits.five_hour.used_percentage')
