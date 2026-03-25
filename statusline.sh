@@ -77,6 +77,7 @@ workspace_dir=$(jq_get '.workspace.project_dir' "$project_dir")
 # Context window info
 context_used_pct=$(jq_get_num '.context_window.used_percentage')
 context_remaining_pct=$(jq_get_num '.context_window.remaining_percentage')
+context_max_tokens=$(jq_get_num '.context_window.max_tokens')
 
 # Rate limits (only available for Anthropic API)
 five_hour_pct=$(jq_get_num '.rate_limits.five_hour.used_percentage')
@@ -353,11 +354,34 @@ fi
 # Line 2: Context & Usage
 line2_parts=()
 
-# Context remaining
-if [[ -n "$context_remaining_pct" ]]; then
+# Context remaining with total
+format_tokens() {
+    local tokens=$1
+    if [[ "$tokens" -ge 1000 ]]; then
+        printf "%.0fk" $((tokens / 1000))
+    else
+        echo "$tokens"
+    fi
+}
+
+if [[ -n "$context_max_tokens" && "$context_max_tokens" != "0" ]]; then
+    # Calculate used tokens from percentage
+    if [[ -n "$context_remaining_pct" ]]; then
+        used_tokens=$((context_max_tokens * (100 - context_remaining_pct) / 100))
+        remaining_pct="$context_remaining_pct"
+    elif [[ -n "$context_used_pct" ]]; then
+        used_tokens=$((context_max_tokens * context_used_pct / 100))
+        remaining_pct=$((100 - context_used_pct))
+    else
+        used_tokens=0
+        remaining_pct=100
+    fi
+    used_str=$(format_tokens "$used_tokens")
+    max_str=$(format_tokens "$context_max_tokens")
+    line2_parts+=("Ctx: ${used_str}/${max_str} $(format_pct "$remaining_pct")")
+elif [[ -n "$context_remaining_pct" ]]; then
     line2_parts+=("Ctx: $(format_pct "$context_remaining_pct")")
 elif [[ -n "$context_used_pct" ]]; then
-    # Calculate remaining from used
     remaining=$((100 - context_used_pct))
     line2_parts+=("Ctx: $(format_pct "$remaining")")
 fi
