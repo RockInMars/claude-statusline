@@ -115,13 +115,20 @@ fi
 # Detect Provider from settings.json
 # ------------------------------------------------------------------------------
 get_provider_info() {
-    local settings_file="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/settings.json"
+    local user_settings="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/settings.json"
+    local project_settings="$workspace_dir/.claude/settings.local.json"
     local provider="Anthropic"
     local provider_short="Anthropic"
     local base_url=""
 
-    if [[ -f "$settings_file" ]]; then
-        base_url=$(jq -r '.env.ANTHROPIC_BASE_URL // empty' "$settings_file" 2>/dev/null)
+    # Priority: project local config > user global config
+    if [[ -f "$project_settings" ]]; then
+        base_url=$(jq -r '.env.ANTHROPIC_BASE_URL // empty' "$project_settings" 2>/dev/null)
+    fi
+
+    if [[ -z "$base_url" && -f "$user_settings" ]]; then
+        base_url=$(jq -r '.env.ANTHROPIC_BASE_URL // empty' "$user_settings" 2>/dev/null)
+    fi
 
         # Detect provider from base URL
         if [[ -n "$base_url" ]]; then
@@ -228,7 +235,6 @@ get_provider_info() {
                     ;;
             esac
         fi
-    fi
 
     # Check model ID for Bedrock
     if [[ -n "$model_id" ]]; then
